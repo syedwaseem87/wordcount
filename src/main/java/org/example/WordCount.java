@@ -19,16 +19,16 @@ public class WordCount {
         }
 
         WordCount wordCount = new WordCount();
-        Map<String, Integer> wordCounts = wordCount.getWordCountMap(args[0]);
-        wordCount.printWordCountJson(wordCounts);
+        Map<String, Integer> wordCountMap = wordCount.getWordCountMap(args[0]);
+        wordCount.printWordCountJson(wordCountMap);
     }
 
     /**
      * Prints Word cound in json format
-     * @param wordCounts
+     * @param wordCountMap
      */
-    private void printWordCountJson(Map<String, Integer> wordCounts) {
-        System.out.println(new Gson().toJson(wordCounts));
+    private void printWordCountJson(Map<String, Integer> wordCountMap) {
+        System.out.println(new Gson().toJson(wordCountMap));
     }
 
     /**
@@ -37,34 +37,34 @@ public class WordCount {
      * @return Map<String, Integer>
      */
     Map<String, Integer> getWordCountMap(String filePath) {
-        Map<String, Integer> wordCounts = new ConcurrentHashMap<>();
+        Map<String, Integer> wordCountMap = new ConcurrentHashMap<>();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(filePath)), StandardCharsets.UTF_8))) {
             String line;
             while ((line = br.readLine()) != null) {
                 StringTokenizer tokenizer = new StringTokenizer(line, " ");
                 while (tokenizer.hasMoreTokens()) {
-                    getWordCounts(tokenizer, wordCounts);
+                    getWordCounts(tokenizer, wordCountMap);
                 }
             }
         } catch (IOException e) {
             System.out.println("IOException occurred" + e);
             throw new RuntimeException(e);
         }
-        return wordCounts;
+        return wordCountMap;
     }
 
     /**
      * Get Word count and put it in the map
      * @param tokenizer
-     * @param wordCounts
+     * @param wordCountMap
      */
-    void getWordCounts(StringTokenizer tokenizer, Map<String, Integer> wordCounts) {
+    void getWordCounts(StringTokenizer tokenizer, Map<String, Integer> wordCountMap) {
         String currentWord = tokenizer.nextToken().toLowerCase().replaceAll("[^A-Za-z]", "");
         if (!currentWord.isEmpty()) {
-            if (wordCounts.containsKey(currentWord)) {
-                wordCounts.put(currentWord, wordCounts.get(currentWord) + 1);
+            if (wordCountMap.containsKey(currentWord)) {
+                wordCountMap.put(currentWord, wordCountMap.get(currentWord) + 1);
             } else {
-                wordCounts.put(currentWord, 1);
+                wordCountMap.put(currentWord, 1);
             }
         }
     }

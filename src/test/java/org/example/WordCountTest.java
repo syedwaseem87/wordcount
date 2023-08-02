@@ -25,7 +25,7 @@ public class WordCountTest {
 
     @Test
     public void testGetWordCountMapWhenFileIsNotPresent() {
-        RuntimeException thrown = assertThrows(
+        assertThrows(
                 RuntimeException.class,
                 () -> wordCount.getWordCountMap("test.txt"),
                 "Expected getWordCountMap() to throw, but it didn't"
