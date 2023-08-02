@@ -14,6 +14,10 @@ import java.util.StringTokenizer;
 
 public class WordCount {
     public static void main(String[] args) {
+        if (args.length == 0) {
+            throw new IllegalArgumentException("Please pass the file name as an argument to the program");
+        }
+
         WordCount wordCount = new WordCount();
         Map<String, Integer> wordCounts = wordCount.getWordCountMap(args[0]);
         wordCount.printWordCountJson(wordCounts);
@@ -34,7 +38,7 @@ public class WordCount {
                 }
             }
         } catch (IOException e) {
-            System.out.println("IOException occurred");
+            System.out.println("IOException occurred" + e);
             throw new RuntimeException(e);
         }
         return wordCounts;
@@ -42,11 +46,12 @@ public class WordCount {
 
     void getWordCounts(StringTokenizer tokenizer, Map<String, Integer> wordCounts) {
         String currentWord = tokenizer.nextToken().toLowerCase().replaceAll("[^A-Za-z]", "");
-
-        if (wordCounts.containsKey(currentWord)) {
-            wordCounts.put(currentWord, wordCounts.get(currentWord) + 1);
-        } else {
-            wordCounts.put(currentWord, 1);
+        if (!currentWord.isEmpty()) {
+            if (wordCounts.containsKey(currentWord)) {
+                wordCounts.put(currentWord, wordCounts.get(currentWord) + 1);
+            } else {
+                wordCounts.put(currentWord, 1);
+            }
         }
     }
 }
