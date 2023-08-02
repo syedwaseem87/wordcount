@@ -8,9 +8,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class WordCount {
     public static void main(String[] args) {
@@ -23,12 +23,21 @@ public class WordCount {
         wordCount.printWordCountJson(wordCounts);
     }
 
-    void printWordCountJson(Map<String, Integer> wordCounts) {
+    /**
+     * Prints Word cound in json format
+     * @param wordCounts
+     */
+    private void printWordCountJson(Map<String, Integer> wordCounts) {
         System.out.println(new Gson().toJson(wordCounts));
     }
 
+    /**
+     * Gets word count map
+     * @param filePath
+     * @return Map<String, Integer>
+     */
     Map<String, Integer> getWordCountMap(String filePath) {
-        Map<String, Integer> wordCounts = new HashMap<>();
+        Map<String, Integer> wordCounts = new ConcurrentHashMap<>();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(filePath)), StandardCharsets.UTF_8))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -44,6 +53,11 @@ public class WordCount {
         return wordCounts;
     }
 
+    /**
+     * Get Word count and put it in the map
+     * @param tokenizer
+     * @param wordCounts
+     */
     void getWordCounts(StringTokenizer tokenizer, Map<String, Integer> wordCounts) {
         String currentWord = tokenizer.nextToken().toLowerCase().replaceAll("[^A-Za-z]", "");
         if (!currentWord.isEmpty()) {
